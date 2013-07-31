@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 use feature "say";
 open $SRT,"<","guru.srt";
+open $OUT,">","Guru.srt";
 %start_diag;
 %start_diff;
 %start_cum;
 %start_new;
 while(<$SRT>) {
-    print "fuck you\n";
     if($_ =~ /-->/) {
 	$_;
 	($start,$end)=split(/-->/,$_);
@@ -24,7 +24,6 @@ while(<$SRT>) {
 
     }
 }
-print "Hello\n";
 @keys=sort{$a<=>$b}keys(%start_diag);
 for($i=0;$i<@keys-1;$i++) {
     $start_cum{$keys[$i]}=$keys[$i+1]-$keys[$i];
@@ -56,10 +55,12 @@ for($j=$u_start;$i<@keys;$i++) {
 }
 $count=1;
 for $key(sort{$a<=>$b}keys(%start_magic)) {
-    print $count++,"\n";
-    print revert($start_magic{$key})," --> ",revert($start_magic{$key}+$start_diff{$key}),"\n";
-    print $start_diag{$key},"\n";
+    print $OUT $count++,"\n";
+    print $OUT revert($start_magic{$key})," --> ",revert($start_magic{$key}+$start_diff{$key}),"\n";
+    print $OUT $start_diag{$key},"\n";
 }
+close $OUT;
+close $SRT;
 #while(($key,$value)=each(%start_diag)){
  #  print  $key," : ",$value;
 #}
